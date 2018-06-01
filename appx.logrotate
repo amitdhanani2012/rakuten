@@ -1,0 +1,8 @@
+/var/log/upstart/appx.log {
+  rotate 12
+  daily
+  compress
+  missingok
+  
+}
+

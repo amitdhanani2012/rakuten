@@ -1,0 +1,28 @@
+---
+ - hosts: web
+   tasks:
+       - name: create directory
+         file: path=/webapps state=directory owner=vagrant group=vagrant mode=755
+       - name: create directory
+         file: path=/webapps/devops state=directory owner=vagrant group=vagrant mode=755    
+       - name: copy application
+         copy: src=app.py dest=/webapps/devops/app.py mode=500 owner=vagrant group=vagrant
+       - name: copy logrotate
+         copy: src=appx.logrotate dest=/etc/logrotate.d/appx mode=444 owner=vagrant group=vagrant    
+       - name: copy upstart file
+         copy: src=appx.conf dest=/etc/init/appx.conf mode=444 owner=vagrant group=vagrant    
+       - name: upstart enable reswap on crash          
+         service: name=appx enabled=yes
+       - name: Time Date set to UTC
+         command: timedatectl set-timezone UTC
+       - name: install python dev
+         apt: name=python-dev update_cache=yes
+       - name: install python pip
+         apt: name=python-pip update_cache=yes
+       - name: flask pip install
+         pip: 
+            name: flask         
+       - name: start application 
+         service: name=appx state=started
+ 
+                                
